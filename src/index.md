@@ -1,7 +1,7 @@
 ---
 theme: dashboard
 title: Paqi dashboard
-toc: false
+toc: true
 ---
 
 # Pakistan AQI Dashboard 🚀
@@ -15,6 +15,8 @@ const aqi = FileAttachment("data/aqi.csv").csv({ typed: true });
 const countryData = await FileAttachment("data/countries.csv").csv({
   typed: true,
 });
+const tokens = await FileAttachment("data/tokens.json").json({ typed: true });
+//console.log("Loaded tokens:", tokens);
 ```
 
 <!-- Load components used in this page -->
@@ -22,13 +24,10 @@ const countryData = await FileAttachment("data/countries.csv").csv({
 ```js
 import { aqiBarChart } from "./components/ranks.js";
 import { aqiLegend } from "./components/aqi_legend.js";
+import { stationMap } from "./components/maps.js";
 ```
 
-## Data checking
-
-Loading and displaying the data below for checking.
-
-### AQI Ranks
+## AQI Rankings
 
 ```js
 function aqi_sparkbar() {
@@ -67,8 +66,6 @@ function aqi_sparkbar() {
 }
 ```
 
-Table with search
-
 ```js
 // Search input
 const search = view(Inputs.search(ranks, { placeholder: "Search cities..." }));
@@ -98,32 +95,19 @@ Inputs.table(search, {
 
 ${aqiLegend()}
 
-Displaying a chart here.
 
-```js
-// city selector slider
-const numCities = view(
-  Inputs.range([5, 20], {
-    label: "Number of cities",
-    step: 5,
-    value: 10,
-  })
-);
-```
+# Station and City data
+
+## City and Stations AQI map
 
 <div class="grid grid-cols-1">
   <div class="card">
-    ${resize((width) => aqiBarChart(ranks, numCities, {width}))}
+    ${resize((width) => stationMap(aqi, {
+      width,
+      MAPBOX_ACCESS_TOKEN: tokens.MAPBOX_ACCESS_TOKEN
+      }))}
   </div>
 </div>
-
-### Station and City data
-
-Seperate this into two seperate files.
-
-```js
-display(Inputs.table(aqi));
-```
 
 <!-- A shared color scale for consistency, sorted by the number of launches -->
 
@@ -143,26 +127,31 @@ const color = Plot.scale({
 });
 ```
 
-<!-- Cards with big numbers -->
 
-<div class="grid grid-cols-4">
+
+
+# Appendix
+Charts made but probably not needed, leaving for code sample.
+
+## Cities AQI rankings
+
+```js
+// city selector slider
+const numCities = view(
+  Inputs.range([5, 20], {
+    label: "Number of cities",
+    step: 5,
+    value: 10,
+  })
+);
+```
+
+<div class="grid grid-cols-1">
   <div class="card">
-    <h2>United States 🇺🇸</h2>
-    <span class="big">${launches.filter((d) => d.stateId === "US").length.toLocaleString("en-US")}</span>
-  </div>
-  <div class="card">
-    <h2>Russia 🇷🇺 <span class="muted">/ Soviet Union</span></h2>
-    <span class="big">${launches.filter((d) => d.stateId === "SU" || d.stateId === "RU").length.toLocaleString("en-US")}</span>
-  </div>
-  <div class="card">
-    <h2>China 🇨🇳</h2>
-    <span class="big">${launches.filter((d) => d.stateId === "CN").length.toLocaleString("en-US")}</span>
-  </div>
-  <div class="card">
-    <h2>Other</h2>
-    <span class="big">${launches.filter((d) => d.stateId !== "US" && d.stateId !== "SU" && d.stateId !== "RU" && d.stateId !== "CN").length.toLocaleString("en-US")}</span>
+    ${resize((width) => aqiBarChart(ranks, numCities, {width}))}
   </div>
 </div>
+
 
 <!-- Plot of launch history -->
 
@@ -226,5 +215,52 @@ function vehicleChart(data, { width }) {
     ${resize((width) => vehicleChart(launches, {width}))}
   </div>
 </div>
+
+## Cards 
+
+<!-- Cards with big numbers -->
+
+<!-- Cards with AQI data for Pakistani cities -->
+
+```js
+function cityAqiCards(data) {
+  const cityData = data
+    .filter(d => d.data_source === "city" && d.data_type === "current")
+    .sort((a, b) => b.aqius - a.aqius);  // Sort by AQI descending
+    
+  return htl.html`
+    <div class="grid grid-cols-4">
+      ${cityData.map(city => htl.html`
+        <div class="card">
+          <h3>${city.city}</h3>
+          <span class="big">${Math.round(city.aqius)}</span>
+          <div class="text-sm">PM2.5: ${Math.round(city.pm25)} μg/m³</div>
+        </div>
+      `)}
+    </div>
+  `;
+}
+```
+${cityAqiCards(aqi)}
+
+<div class="grid grid-cols-4">
+  <div class="card">
+    <h2>United States 🇺🇸</h2>
+    <span class="big">${launches.filter((d) => d.stateId === "US").length.toLocaleString("en-US")}</span>
+  </div>
+  <div class="card">
+    <h2>Russia 🇷🇺 <span class="muted">/ Soviet Union</span></h2>
+    <span class="big">${launches.filter((d) => d.stateId === "SU" || d.stateId === "RU").length.toLocaleString("en-US")}</span>
+  </div>
+  <div class="card">
+    <h2>China 🇨🇳</h2>
+    <span class="big">${launches.filter((d) => d.stateId === "CN").length.toLocaleString("en-US")}</span>
+  </div>
+  <div class="card">
+    <h2>Other</h2>
+    <span class="big">${launches.filter((d) => d.stateId !== "US" && d.stateId !== "SU" && d.stateId !== "RU" && d.stateId !== "CN").length.toLocaleString("en-US")}</span>
+  </div>
+</div>
+
 
 Data: Jonathan C. McDowell, [General Catalog of Artificial Space Objects](https://planet4589.org/space/gcat)

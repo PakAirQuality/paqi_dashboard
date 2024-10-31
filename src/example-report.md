@@ -32,6 +32,7 @@ timeline(events, {height: 300})
 
 This was the first artificial satellite. Launched by the Soviet Union, it marked the beginning of the space age.
 
+
 ### Apollo 11 (1969)
 
 The historic Apollo 11 mission, led by NASA, marked the first successful human landing on the Moon. Astronauts Neil Armstrong and Buzz Aldrin became the first humans to set foot on the lunar surface.

@@ -1,5 +1,6 @@
 import * as Plot from "npm:@observablehq/plot";
 
+
 export function aqiBarChart(data, numCities, {width} = {}) {
   // Define the AQI levels and colors as an array of objects
   const aqiLevels = [
@@ -51,7 +52,7 @@ export function aqiBarChart(data, numCities, {width} = {}) {
         title: d => `Rank: ${d.rank}
   AQI: ${d.current_aqi}
   Level: ${aqiLevelText(d.current_aqi)}
-  
+
   ${d.city}, ${d.country}
   Updated: ${formatDate(d.updated)}`,
         tip: true

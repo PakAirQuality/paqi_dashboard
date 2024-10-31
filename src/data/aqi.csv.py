@@ -4,6 +4,7 @@ import sys
 from datetime import datetime
 from typing import List, Tuple
 
+import llm
 import pandas as pd
 from pyairvisual.cloud_api import CloudAPI
 
@@ -26,18 +27,19 @@ async def main():
     # make the final df
     air_quality_df = await get_air_quality_data(cities)
 
-    # save to csv for testing
-    current_date = datetime.now().strftime("%Y-%m-%d_%H%M")
-    filename = f"air_quality_data_{current_date}.csv"
-    air_quality_df.to_csv(filename, index=False)
-
     end_time = datetime.now()
     duration = end_time - start_time
     if DEBUG:
         print(f"\nFinished at: {end_time.strftime('%Y-%m-%d %H:%M:%S')}")
 
-    # for observable, write to stdout
-    air_quality_df.to_csv(sys.stdout)
+        # save to csv for debugging / testing
+        current_date = datetime.now().strftime("%Y-%m-%d_%H%M")
+        filename = f"air_quality_data_{current_date}.csv"
+        air_quality_df.to_csv(filename, index=False)
+
+    else:
+        # for observable, write to stdout
+        air_quality_df.to_csv(sys.stdout)
 
 
 # list of cities for a given country
@@ -196,6 +198,107 @@ async def get_all_stations_data(
 # convert a city or stations nested json data into a flat dataframe
 
 
+def get_aqi_averages(combined_df, current_city_mask, current_date):
+    """Calculate average PM2.5 and AQI values for yesterday and tomorrow.
+
+    Args:
+        combined_df (pd.DataFrame): DataFrame containing historical and forecast data
+        current_city_mask (pd.Series): Boolean mask for current city's rows
+        current_date (pd.Timestamp): Reference date for calculating yesterday/tomorrow
+
+    Returns:
+        tuple: Two pd.Series containing mean PM2.5 and AQI values for:
+            - yesterday_avgs: Previous day's averages with city name as index
+            - tomorrow_avgs: Next day's forecast averages with city name as index
+    """
+    # Get city name from current data
+    city_name = combined_df[current_city_mask]["city"].iloc[0]
+
+    # Create mask for this city (all data types)
+    city_mask = combined_df["city"] == city_name
+
+    # Get yesterday's data
+    yesterday_data = combined_df[
+        city_mask
+        & (combined_df["data_type"] == "history")
+        & (combined_df["date"] == current_date - pd.Timedelta(days=1))
+    ]
+    yesterday_avgs = yesterday_data[["pm25", "aqius"]].mean().round(1)
+    yesterday_avgs["city"] = city_name
+
+    # Get tomorrow's forecast
+    tomorrow_data = combined_df[
+        city_mask
+        & (combined_df["data_type"] == "forecast")
+        & (combined_df["date"] == current_date + pd.Timedelta(days=1))
+    ]
+    tomorrow_avgs = tomorrow_data[["pm25", "aqius"]].mean().round(1)
+    tomorrow_avgs["city"] = city_name
+
+    if DEBUG:
+        print("\nYesterday's Average")
+        print(yesterday_avgs)
+        print("\nTomorrow's Forecast Average")
+        print(tomorrow_avgs)
+
+    return yesterday_avgs, tomorrow_avgs
+
+
+def get_comment(row, model, yesterday_avgs, tomorrow_avgs):
+    """Generate an LLM comment about air quality for a given city row"""
+
+    city = row["city"]
+    # Verify we're using the correct city's averages
+    assert yesterday_avgs["city"] == city
+    assert tomorrow_avgs["city"] == city
+
+    # Calculate trends
+    pm25_yesterday_trend = row["pm25"] - yesterday_avgs["pm25"]
+    pm25_tomorrow_trend = tomorrow_avgs["pm25"] - row["pm25"]
+    aqi_yesterday_trend = row["aqius"] - yesterday_avgs["aqius"]
+    aqi_tomorrow_trend = tomorrow_avgs["aqius"] - row["aqius"]
+
+    system_prompt = """You are a helpful assistant providing short, one-line observations about air quality data. Be informative but slightly humorous.
+
+    Use the provided AQI and PM2.5 values to give specific insights about the air quality situation, and consider yesterday's and tmrw's forecast too. Consider the trend from the readings from yesterday, today and tmorrows forecast.
+    
+    Consider the time of day and temperature when relevant.
+
+    Use the passed in values and AQI scale below to inform your comment:
+    
+    GREEN 1. Good (AQI: 0-50, PM2.5: 0-9.0 μg/m3):
+    Safe for everyone. Outdoor activities and ventilation OK.
+
+    YELLOW 2. Moderate (AQI: 51-100, PM2.5: 9.1-35.4):
+    Sensitive groups should limit outdoor exercise. Avoid ventilation.
+
+    ORANGE 3. Unhealthy for Sensitive Groups (AQI: 101-150, PM2.5: 35.5-55.4):
+    Everyone may experience irritation. Public should reduce outdoor activity. Sensitive groups should avoid outdoors and use masks.
+
+    RED 4. Unhealthy (AQI: 151-200, PM2.5: 55.5-125.4):
+    Increased health risks for all. Everyone should avoid outdoors and wear masks. Use air purifiers indoors.
+
+    PURPLE 5. Very Unhealthy (AQI: 201-300, PM2.5: 125.5-225.4):
+    Public noticeably affected. Everyone should avoid outdoors, wear masks, and use air purifiers.
+
+    MAROON 6. Hazardous (AQI: 301-500+, PM2.5: 225.5+):
+    High risk for everyone. Stay indoors, use masks if outdoors, run air purifiers.
+    """
+
+    prompt = f"""Give me a one-line observation about the air quality in {row['city']}, Pakistan.
+    Key metrics:
+    Yesterday's averages: PM2.5 = {yesterday_avgs['pm25']}, AQI = {yesterday_avgs['aqius']}
+    Current values: PM2.5 = {row['pm25']}, AQI = {row['aqius']}, Temp = {row['tp']}
+    Tomorrow's forecast averages: PM2.5 = {tomorrow_avgs['pm25']}, AQI = {tomorrow_avgs['aqius']}
+    """
+
+    response = model.prompt(prompt, system=system_prompt)
+    if DEBUG:
+        print(f"\n{city} prompt: {prompt}")
+        print(f"{city}: {response.text()}")
+    return response.text().strip()
+
+
 def create_combined_dataframe(data):
     """
     Create a DataFrame from either city or station air quality data, optimized for visualization
@@ -338,7 +441,10 @@ async def get_air_quality_data(cities: List[Tuple[str, str]]):
     """Get both city-level and station-level air quality data and combine into one DataFrame"""
 
     # Get both types of data
-    station_readings = await get_all_stations_data(cities, max_concurrent=10)
+    if DEBUG:
+        station_readings = None
+    else:
+        station_readings = await get_all_stations_data(cities, max_concurrent=10)
     city_readings = await get_cities_data(cities)
 
     # Combine all data into one DataFrame
@@ -373,6 +479,7 @@ async def get_air_quality_data(cities: List[Tuple[str, str]]):
 
     # Combine all into one DataFrame
     combined_df = pd.concat(dfs, ignore_index=True)
+    combined_df["comment"] = pd.NA
 
     # Sort by timestamp and location
     # combined_df.sort_values(["ts", "city", "station"], inplace=True)
@@ -382,6 +489,38 @@ async def get_air_quality_data(cities: List[Tuple[str, str]]):
         print(f"Processed {len(dfs)} datasets")
         print(f"Total rows in DataFrame: {len(combined_df)}")
         print(f"Date range: {combined_df['ts'].min()} to {combined_df['ts'].max()}")
+
+    # Add comments for cities' current readings
+    model = llm.get_model("claude-3-haiku-20240307")
+
+    # Create mask for current city readings
+    current_city_mask = (combined_df["data_source"] == "city") & (
+        combined_df["data_type"] == "current"
+    )
+
+    # Get all current cities
+    masked_df = combined_df[current_city_mask]
+
+    # this should call the get_comment func for only cities / current
+    # Process each city separately
+    for city in masked_df["city"].unique():
+        # Create city-specific mask
+        city_mask = current_city_mask & (combined_df["city"] == city)
+
+        # Get current date for this city
+        current_date = combined_df[city_mask]["date"].iloc[0]
+
+        # Get averages for this city
+        yesterday_avgs, tomorrow_avgs = get_aqi_averages(
+            combined_df, city_mask, current_date
+        )
+
+        # Update comments for this city's current readings
+        city_df = combined_df[city_mask]
+        combined_df.loc[city_mask, "comment"] = city_df.apply(
+            lambda row: get_comment(row, model, yesterday_avgs, tomorrow_avgs),
+            axis=1,
+        )
 
     return combined_df
 

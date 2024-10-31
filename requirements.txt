@@ -1,0 +1,5 @@
+pandas
+pyairvisual
+stamina
+llm
+llm-claude-3
