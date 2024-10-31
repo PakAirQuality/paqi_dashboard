@@ -11,6 +11,10 @@ DEBUG = False
 
 # air visual API
 AIRVISUAL_KEY = os.environ.get("AIRVISUAL_KEY")
+if not AIRVISUAL_KEY:
+    print("AIRVISUAL_KEY environment variable not set")
+    sys.exit(1)
+    
 cloud_api = CloudAPI(AIRVISUAL_KEY)
 
 
