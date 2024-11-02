@@ -116,6 +116,8 @@ ${aqiLegend()}
 
 ## Bar plot
 
+Displays 2 days of history, current, and 5 days of forecast data.
+
 <div class="grid grid-cols-1">
   <div class="card">
     ${resize((width) => barChart(aqi, { width }))}
