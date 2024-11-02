@@ -1,32 +1,20 @@
 ---
-title: Example report
+title: Graphs etc to work towards
 ---
 
-# A brief history of space exploration
+# Live rankings for Most polluted cities and Cleanest cities for Global and Pakistan
 
-This report is a brief overview of the history and current state of rocket launches and space exploration.
+Mostly done, beta version on index page. Need to show PM2.5 and AQI US numbers.
 
-## Background
+## Historical rankings Pakistan only
 
-The history of rocket launches dates back to ancient China, where gunpowder-filled tubes were used as primitive forms of propulsion.
+PM2.5, monthly average for each month. 
 
-Fast-forward to the 20th century during the Cold War era, the United States and the Soviet Union embarked on a space race, a competition to innovate and explore beyond Earth.
+This is pending adding historical data to this dashboard.
 
-This led to the launch of the first artificial satellite, Sputnik 1, and the crewed moon landing by Apollo 11. As technology advanced, rocket launches became synonymous with space exploration and satellite deployment.
+## Map of stations
 
-## The Space Shuttle era
-
-```js
-import {timeline} from "./components/timeline.js";
-```
-
-```js
-const events = FileAttachment("./data/events.json").json();
-```
-
-```js
-timeline(events, {height: 300})
-```
+Beta version added, look at adding more data layers and info.
 
 ### Sputnik 1 (1957)
 

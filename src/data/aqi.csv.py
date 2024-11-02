@@ -10,7 +10,7 @@ from pyairvisual.cloud_api import CloudAPI
 
 # set debug = True for testing
 # otherwise print statements get added to the final csv
-DEBUG = False
+DEBUG = True
 
 # air visual API
 AIRVISUAL_KEY = os.environ.get("AIRVISUAL_KEY")
@@ -40,6 +40,29 @@ async def main():
     else:
         # for observable, write to stdout
         air_quality_df.to_csv(sys.stdout)
+
+
+# Define the AQI levels as a list of dictionaries
+aqi_levels = [
+    {"level": "Good", "min": 0, "max": 50, "color": "#97C93D"},
+    {"level": "Moderate", "min": 51, "max": 100, "color": "#FFCF01"},
+    {
+        "level": "Unhealthy for Sensitive Groups",
+        "min": 101,
+        "max": 150,
+        "color": "#FF9933",
+    },
+    {"level": "Unhealthy", "min": 151, "max": 200, "color": "#FF3333"},
+    {"level": "Very Unhealthy", "min": 201, "max": 300, "color": "#A35DB5"},
+    {"level": "Hazardous", "min": 301, "max": float("inf"), "color": "#8B3F3F"},
+]
+
+# Function to get level and color based on AQI value
+def get_aqi_info(aqi_value):
+    for level in aqi_levels:
+        if level["min"] <= aqi_value <= level["max"]:
+            return level["level"], level["color"]
+    return "Unknown", "#000000"  # Default return if no range matches
 
 
 # list of cities for a given country
@@ -97,7 +120,7 @@ async def get_city_data(
 
 
 async def get_cities_data(
-    cities: List[Tuple[str, str]], country: str = "Pakistan", max_concurrent: int = 7
+    cities: List[Tuple[str, str]], country: str = "Pakistan", max_concurrent: int = 10
 ) -> dict:
     """Get data for multiple cities concurrently"""
 
@@ -161,7 +184,7 @@ async def get_stations_data(city, state, country):
 
 
 async def get_all_stations_data(
-    cities: List[Tuple[str, str]], country: str = "Pakistan", max_concurrent: int = 8
+    cities: List[Tuple[str, str]], country: str = "Pakistan", max_concurrent: int = 12
 ) -> dict:
     """
     Get data for all stations in multiple cities concurrently
@@ -243,26 +266,9 @@ def get_aqi_averages(combined_df, current_city_mask, current_date):
 
     return yesterday_avgs, tomorrow_avgs
 
+system_prompt = """You are a helpful assistant providing short, one-line observations about air quality data. Be informative but slightly humorous.
 
-def get_comment(row, model, yesterday_avgs, tomorrow_avgs):
-    """Generate an LLM comment about air quality for a given city row"""
-
-    city = row["city"]
-    # Verify we're using the correct city's averages
-    assert yesterday_avgs["city"] == city
-    assert tomorrow_avgs["city"] == city
-
-    # Calculate trends
-    pm25_yesterday_trend = row["pm25"] - yesterday_avgs["pm25"]
-    pm25_tomorrow_trend = tomorrow_avgs["pm25"] - row["pm25"]
-    aqi_yesterday_trend = row["aqius"] - yesterday_avgs["aqius"]
-    aqi_tomorrow_trend = tomorrow_avgs["aqius"] - row["aqius"]
-
-    system_prompt = """You are a helpful assistant providing short, one-line observations about air quality data. Be informative but slightly humorous.
-
-    Use the provided AQI and PM2.5 values to give specific insights about the air quality situation, and consider yesterday's and tmrw's forecast too. Consider the trend from the readings from yesterday, today and tmorrows forecast.
-    
-    Consider the time of day and temperature when relevant.
+    Use provided AQI and PM2.5 values to give insights about the air quality situation, and consider yesterday's actual and tmrw's forecast too. 
 
     Use the passed in values and AQI scale below to inform your comment:
     
@@ -285,6 +291,21 @@ def get_comment(row, model, yesterday_avgs, tomorrow_avgs):
     High risk for everyone. Stay indoors, use masks if outdoors, run air purifiers.
     """
 
+def get_comment(row, model, yesterday_avgs, tomorrow_avgs):
+    """Generate an LLM comment about air quality for a given city row"""
+
+    city = row["city"]
+    # Verify we're using the correct city's averages
+    assert yesterday_avgs["city"] == city
+    assert tomorrow_avgs["city"] == city
+
+    # Calculate trends
+    pm25_yesterday_trend = row["pm25"] - yesterday_avgs["pm25"]
+    pm25_tomorrow_trend = tomorrow_avgs["pm25"] - row["pm25"]
+    aqi_yesterday_trend = row["aqius"] - yesterday_avgs["aqius"]
+    aqi_tomorrow_trend = tomorrow_avgs["aqius"] - row["aqius"]
+
+
     prompt = f"""Give me a one-line observation about the air quality in {row['city']}, Pakistan.
     Key metrics:
     Yesterday's averages: PM2.5 = {yesterday_avgs['pm25']}, AQI = {yesterday_avgs['aqius']}
@@ -292,11 +313,19 @@ def get_comment(row, model, yesterday_avgs, tomorrow_avgs):
     Tomorrow's forecast averages: PM2.5 = {tomorrow_avgs['pm25']}, AQI = {tomorrow_avgs['aqius']}
     """
 
-    response = model.prompt(prompt, system=system_prompt)
+    try:
+        response = model.prompt(prompt, system=system_prompt)
+        comment = response.text().strip()
+    except Exception as e:
+        if DEBUG:
+            print(f"Anthropic API error: {str(e)}")
+        comment = ""
+
     if DEBUG:
         print(f"\n{city} prompt: {prompt}")
-        print(f"{city}: {response.text()}")
-    return response.text().strip()
+        print(f"{city}: {comment}")
+
+    return comment
 
 
 def create_combined_dataframe(data):
@@ -420,6 +449,11 @@ def create_combined_dataframe(data):
     df["hour"] = df["ts"].dt.hour
     df["date"] = df["ts"].dt.date
     df["weekday"] = df["ts"].dt.day_name()
+
+    # add aqi level and color cols
+    df[["aqi_level", "aqi_color"]] = df.apply(
+        lambda row: pd.Series(get_aqi_info(row["aqius"])), axis=1
+    )
 
     # Set multi-index
     # index_cols = ["timestamp", "city"]

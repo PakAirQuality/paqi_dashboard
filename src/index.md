@@ -1,5 +1,5 @@
 ---
-theme: dashboard
+theme: [light, dashboard]
 title: Paqi dashboard
 toc: true
 ---
@@ -25,6 +25,8 @@ const tokens = await FileAttachment("data/tokens.json").json({ typed: true });
 import { aqiBarChart } from "./components/ranks.js";
 import { aqiLegend } from "./components/aqi_legend.js";
 import { stationMap } from "./components/maps.js";
+import { createChart } from "./components/chart.js";
+import { barChart } from "./components/barplot.js";
 ```
 
 ## AQI Rankings
@@ -108,6 +110,28 @@ ${aqiLegend()}
       }))}
   </div>
 </div>
+
+
+# Chart
+
+## Bar plot
+
+<div class="grid grid-cols-1">
+  <div class="card">
+    ${resize((width) => barChart(aqi, { width }))}
+  </div>
+</div>
+
+## Box plot
+
+<div class="grid grid-cols-1">
+  <div class="card">
+    ${resize((width) => createChart(aqi, { width }))}
+  </div>
+</div>
+
+
+
 
 <!-- A shared color scale for consistency, sorted by the number of launches -->
 
@@ -243,24 +267,7 @@ function cityAqiCards(data) {
 ```
 ${cityAqiCards(aqi)}
 
-<div class="grid grid-cols-4">
-  <div class="card">
-    <h2>United States 🇺🇸</h2>
-    <span class="big">${launches.filter((d) => d.stateId === "US").length.toLocaleString("en-US")}</span>
-  </div>
-  <div class="card">
-    <h2>Russia 🇷🇺 <span class="muted">/ Soviet Union</span></h2>
-    <span class="big">${launches.filter((d) => d.stateId === "SU" || d.stateId === "RU").length.toLocaleString("en-US")}</span>
-  </div>
-  <div class="card">
-    <h2>China 🇨🇳</h2>
-    <span class="big">${launches.filter((d) => d.stateId === "CN").length.toLocaleString("en-US")}</span>
-  </div>
-  <div class="card">
-    <h2>Other</h2>
-    <span class="big">${launches.filter((d) => d.stateId !== "US" && d.stateId !== "SU" && d.stateId !== "RU" && d.stateId !== "CN").length.toLocaleString("en-US")}</span>
-  </div>
-</div>
 
 
-Data: Jonathan C. McDowell, [General Catalog of Artificial Space Objects](https://planet4589.org/space/gcat)
+
+Data: Pakistan A
