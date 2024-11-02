@@ -10,7 +10,7 @@ from pyairvisual.cloud_api import CloudAPI
 
 # set debug = True for testing
 # otherwise print statements get added to the final csv
-DEBUG = True
+DEBUG = False
 
 # air visual API
 AIRVISUAL_KEY = os.environ.get("AIRVISUAL_KEY")
@@ -56,6 +56,7 @@ aqi_levels = [
     {"level": "Very Unhealthy", "min": 201, "max": 300, "color": "#A35DB5"},
     {"level": "Hazardous", "min": 301, "max": float("inf"), "color": "#8B3F3F"},
 ]
+
 
 # Function to get level and color based on AQI value
 def get_aqi_info(aqi_value):
@@ -266,6 +267,7 @@ def get_aqi_averages(combined_df, current_city_mask, current_date):
 
     return yesterday_avgs, tomorrow_avgs
 
+
 system_prompt = """You are a helpful assistant providing short, one-line observations about air quality data. Be informative but slightly humorous.
 
     Use provided AQI and PM2.5 values to give insights about the air quality situation, and consider yesterday's actual and tmrw's forecast too. 
@@ -291,6 +293,7 @@ system_prompt = """You are a helpful assistant providing short, one-line observa
     High risk for everyone. Stay indoors, use masks if outdoors, run air purifiers.
     """
 
+
 def get_comment(row, model, yesterday_avgs, tomorrow_avgs):
     """Generate an LLM comment about air quality for a given city row"""
 
@@ -304,7 +307,6 @@ def get_comment(row, model, yesterday_avgs, tomorrow_avgs):
     pm25_tomorrow_trend = tomorrow_avgs["pm25"] - row["pm25"]
     aqi_yesterday_trend = row["aqius"] - yesterday_avgs["aqius"]
     aqi_tomorrow_trend = tomorrow_avgs["aqius"] - row["aqius"]
-
 
     prompt = f"""Give me a one-line observation about the air quality in {row['city']}, Pakistan.
     Key metrics:
