@@ -50,10 +50,16 @@ export function barChart(data, {width = 640} = {}) {
 function createPlot(selectedCity, selectedMetric) {
     const metric = METRICS[selectedMetric];
     
+    const currentTs = data.find(d => d.data_type === "current")?.ts;
+
     const filteredData = data
-        .filter(d => d.city === selectedCity)
-        .filter(d => d.data_source === "city")
-        .filter(d => d[metric] != null)
+        .filter(d => 
+        d.city === selectedCity && 
+        d.data_source === "city" && 
+        d[metric] != null &&
+        (d.data_type === "current" || 
+         (d.data_type === "history" && d.ts !== currentTs)) // Only keep history rows that don't match current ts
+    )
         .map(d => ({
             ...d,
             timestamp: new Date(d.ts),
@@ -81,7 +87,7 @@ function createPlot(selectedCity, selectedMetric) {
                 fill: d => getAqiColor(d.aqius),
                 fillOpacity: d => d.data_type === "forecast" ? 0.3 : 0.8,
                 channels: {
-                    PM25: "pm25",
+                    //PM25: "pm25",
                     AQIUS: "aqius",
                     Reading: "data_type",
                     timestamp: "ts"
@@ -90,12 +96,27 @@ function createPlot(selectedCity, selectedMetric) {
                     format: {
                         timestamp: d => new Date(d).toLocaleString(),
                         dataType: true,
-                        aqius: d => `${d}`,
+                        //value: d => `${selectedMetric}: ${d.toFixed(2)}`,
+                        aqius: d => `AQI US: ${d}`,
                         pm25: d => `PM2.5: ${d} µg/m³`,
                         fillOpacity: false,
-                        timestamp: false
+                        timestamp: false,
+                        pm25: false
                     }
                 }
+            }),
+            // Add text labels on top of bars
+            Plot.text(filteredData.filter((d, i) => i % 2 === 1), {
+                x: "timestamp",
+                y: "value",
+                text: d => d.value.toFixed(0), // Format number to 0 decimal place
+                dy: -8, // Shift text vertically
+                fontSize: 9,
+                fill: "black",
+                textAnchor: "middle",
+                stroke: "white",
+                strokeWidth: 2,
+                paintOrder: "stroke",
             }),
             // Highlight for current data
             Plot.barY(
@@ -110,8 +131,15 @@ function createPlot(selectedCity, selectedMetric) {
             ),
             // X-axis with days
             Plot.axisX({
-                ticks: "day",
-                tickSize: 5,
+                ticks: "hour",
+                tickSize: 4,
+                tickFormat: (d, i) => {
+                    // Only show format for every other tick
+                    if (i % 2 === 0) {
+                        return `${d.getMonth()+1}/${d.getDate()}\n${d.getHours()}:00`;
+                    }
+                    return ""; // Return empty string for ticks we want to hide
+                }
                 //text: null
             }),
             Plot.ruleY([0]),
