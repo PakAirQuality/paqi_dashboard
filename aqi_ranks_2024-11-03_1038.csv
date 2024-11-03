@@ -1,0 +1,122 @@
+rank,city,state,country,current_aqi,current_aqi_cn,updated
+1,Delhi,Delhi,India,481,366,2024-11-02T23:00:00.000Z
+2,Lahore,Punjab,Pakistan,383,317,2024-11-02T23:00:00.000Z
+3,Kolkata,West Bengal,India,195,155,2024-11-02T23:00:00.000Z
+4,Hanoi,Hanoi,Vietnam,183,133,2024-11-02T23:00:00.000Z
+5,Beijing,Beijing,China,178,124,2024-11-02T23:00:00.000Z
+6,Dhaka,Dhaka,Bangladesh,174,117,2024-11-02T23:00:00.000Z
+7,Wuhan,Hubei,China,174,116,2024-11-02T23:00:00.000Z
+8,Shanghai,Shanghai,China,167,104,2024-11-02T23:00:00.000Z
+9,Mumbai,Maharashtra,India,164,98,2024-11-02T23:00:00.000Z
+10,Dubai,Dubai,United Arab Emirates,156,85,2024-11-02T23:00:00.000Z
+11,Sarajevo,Federation of B&H,Bosnia Herzegovina,153,80,2024-11-02T23:00:00.000Z
+12,Kathmandu,Central Region,Nepal,152,77,2024-11-02T23:00:00.000Z
+13,Kampala,Central Region,Uganda,134,68,2024-11-02T23:00:00.000Z
+14,Jakarta,Jakarta,Indonesia,134,69,2024-11-02T23:00:00.000Z
+15,Cairo,Cairo,Egypt,133,67,2024-11-02T23:00:00.000Z
+16,Skopje,Skopje,North Macedonia,123,62,2024-11-02T23:00:00.000Z
+17,Istanbul,Istanbul,Turkey,104,80,2024-11-02T23:00:00.000Z
+18,Chongqing,Chongqing,China,101,51,2024-11-02T23:00:00.000Z
+19,Tashkent,Toshkent Shahri,Uzbekistan,99,50,2024-11-02T23:00:00.000Z
+20,Guangzhou,Guangdong,China,94,46,2024-11-02T23:00:00.000Z
+21,Kuwait City,Al Asimah,Kuwait,88,41,2024-11-02T23:00:00.000Z
+22,Tehran,Tehran,Iran,87,41,2024-11-02T23:00:00.000Z
+23,Tel Aviv-Yafo,Tel Aviv,Israel,87,62,2024-11-02T23:00:00.000Z
+24,Hangzhou,Zhejiang,China,86,46,2024-11-02T23:00:00.000Z
+25,Athens,Attica,Greece,86,41,2024-11-02T23:00:00.000Z
+26,Birmingham,England,United Kingdom,85,39,2024-11-02T23:00:00.000Z
+27,Algiers,Algiers,Algeria,84,39,2024-11-02T23:00:00.000Z
+28,Lisbon,Lisbon,Portugal,82,37,2024-11-02T23:00:00.000Z
+29,Chengdu,Sichuan,China,82,36,2024-11-02T23:00:00.000Z
+30,Shenzhen,Guangdong,China,82,42,2024-11-02T23:00:00.000Z
+31,Kaohsiung,Kaohsiung,Taiwan,81,53,2024-11-02T23:00:00.000Z
+32,Karachi,Sindh,Pakistan,80,35,2024-11-02T23:00:00.000Z
+33,Wrocław,Lower Silesia,Poland,80,45,2024-11-02T23:00:00.000Z
+34,Ho Chi Minh City,Ho Chi Minh City,Vietnam,80,35,2024-11-02T23:00:00.000Z
+35,Baghdad,Baghdad,Iraq,79,34,2024-11-02T23:00:00.000Z
+36,Accra,Greater Accra,Ghana,79,34,2024-11-02T23:00:00.000Z
+37,Bangkok,Bangkok,Thailand,78,45,2024-11-02T23:00:00.000Z
+38,Riyadh,Ar Riyad,Saudi Arabia,77,33,2024-11-02T23:00:00.000Z
+39,Jerusalem,Jerusalem,Israel,77,58,2024-11-02T23:00:00.000Z
+40,Kraków,Lesser Poland Voivodeship,Poland,77,33,2024-11-02T23:00:00.000Z
+41,Milano,Lombardy,Italy,77,33,2024-11-02T23:00:00.000Z
+42,Kinshasa,Kinshasa,Democratic Republic of the Congo,75,31,2024-11-02T23:00:00.000Z
+43,Batam,Riau Islands,Indonesia,72,41,2024-11-02T23:00:00.000Z
+44,Berlin,Berlin,Germany,72,29,2024-11-02T23:00:00.000Z
+45,Rome,Latium,Italy,71,28,2024-11-02T23:00:00.000Z
+46,Kabul,Kabul,Afghanistan,69,27,2024-11-02T23:00:00.000Z
+47,Doha,Baladiyat ad Dawhah,Qatar,69,26,2024-11-02T23:00:00.000Z
+48,Bucharest,Bucuresti,Romania,69,27,2024-11-02T23:00:00.000Z
+49,Belgrade,Central Serbia,Serbia,69,31,2024-11-02T23:00:00.000Z
+50,Incheon,Incheon,South Korea,69,28,2024-11-02T23:00:00.000Z
+51,Manama,Capital Governorate,Bahrain,68,26,2024-11-02T23:00:00.000Z
+52,Kuching,Sarawak,Malaysia,67,25,2024-11-02T23:00:00.000Z
+53,Warsaw,Mazovia,Poland,67,26,2024-11-02T23:00:00.000Z
+54,Taipei,Taipei,Taiwan,66,41,2024-11-02T23:00:00.000Z
+55,Hong Kong,Hong Kong SAR,Hong Kong SAR,66,27,2024-11-02T23:00:00.000Z
+56,Brussels,Brussels Capital,Belgium,64,25,2024-11-02T23:00:00.000Z
+57,Pristina,Pristina,Kosovo,64,24,2024-11-02T23:00:00.000Z
+58,Zagreb,Zagreb,Croatia,64,50,2024-11-02T23:00:00.000Z
+59,Sofia,Sofia,Bulgaria,64,27,2024-11-02T23:00:00.000Z
+60,Prague,Praha,Czech Republic,64,23,2024-11-02T23:00:00.000Z
+61,Sao Paulo,Sao Paulo,Brazil,64,27,2024-11-02T23:00:00.000Z
+62,Chiang Mai,Chiang Mai,Thailand,64,32,2024-11-02T23:00:00.000Z
+63,Busan,Busan,South Korea,62,25,2024-11-02T23:00:00.000Z
+64,Phnom Penh,Phnom Penh,Cambodia,61,21,2024-11-02T23:00:00.000Z
+65,Nice,Provence-Alpes-Cote d'Azur,France,61,21,2024-11-02T23:00:00.000Z
+66,Lima,Lima,Peru,61,28,2024-11-02T23:00:00.000Z
+67,Bishkek,Bishkek,Kyrgyzstan,60,34,2024-11-02T23:00:00.000Z
+68,Seoul,Seoul,South Korea,60,23,2024-11-02T23:00:00.000Z
+69,Bern,Bern,Switzerland,58,19,2024-11-02T23:00:00.000Z
+70,Medan,North Sumatra,Indonesia,57,38,2024-11-02T23:00:00.000Z
+71,Addis Ababa,Addis Ababa,Ethiopia,57,18,2024-11-02T23:00:00.000Z
+72,Dakar,Dakar,Senegal,56,17,2024-11-02T23:00:00.000Z
+73,Yangon,Yangon,Myanmar,56,17,2024-11-02T23:00:00.000Z
+74,Rotterdam,South Holland,Netherlands,56,20,2024-11-02T23:00:00.000Z
+75,Munich,Bavaria,Germany,55,19,2024-11-02T23:00:00.000Z
+76,Kobe,Hyogo,Japan,55,16,2024-11-02T23:00:00.000Z
+77,Kuala Lumpur,Kuala Lumpur,Malaysia,54,16,2024-11-02T23:00:00.000Z
+78,Ulaanbaatar,Ulaanbaatar,Mongolia,54,18,2024-11-02T23:00:00.000Z
+79,Madrid,Madrid,Spain,54,22,2024-11-02T23:00:00.000Z
+80,Dublin,Leinster,Ireland,54,15,2024-11-02T23:00:00.000Z
+81,Johannesburg,Gauteng,South Africa,53,53,2024-11-02T23:00:00.000Z
+82,Amsterdam,North Holland,Netherlands,53,17,2024-11-02T23:00:00.000Z
+83,Singapore,Singapore,Singapore,53,20,2024-11-02T23:00:00.000Z
+84,Vienna,Vienna,Austria,53,19,2024-11-02T22:00:00.000Z
+85,Osaka,Osaka,Japan,53,17,2024-11-02T23:00:00.000Z
+86,Kyoto,Kyoto,Japan,53,15,2024-11-02T23:00:00.000Z
+87,Chicago,Illinois,USA,49,21,2024-11-02T23:00:00.000Z
+88,Oslo,Oslo,Norway,47,22,2024-11-02T23:00:00.000Z
+89,Paris,Ile-de-France,France,46,17,2024-11-02T23:00:00.000Z
+90,Minneapolis,Minnesota,USA,46,18,2024-11-02T23:00:00.000Z
+91,Bogota,Bogota D.C.,Colombia,44,22,2024-11-02T23:00:00.000Z
+92,Nairobi,Nairobi,Kenya,42,12,2024-11-02T23:00:00.000Z
+93,Detroit,Michigan,USA,41,14,2024-11-02T23:00:00.000Z
+94,Lyon,Auvergne-Rhone-Alpes,France,39,11,2024-11-02T23:00:00.000Z
+95,Budapest,Central Hungary,Hungary,37,20,2024-11-02T23:00:00.000Z
+96,Bratislava,Bratislava,Slovakia,36,22,2024-11-02T23:00:00.000Z
+97,Los Angeles,California,USA,36,28,2024-11-02T23:00:00.000Z
+98,Santiago,Santiago Metropolitan,Chile,32,35,2024-11-02T23:00:00.000Z
+99,Washington D.C.,District of Columbia,USA,31,22,2024-11-02T23:00:00.000Z
+100,Denver,Colorado,USA,29,22,2024-11-02T23:00:00.000Z
+101,London,England,United Kingdom,28,14,2024-11-02T23:00:00.000Z
+102,Krasnoyarsk,Krasnoyarsk Krai,Russia,27,10,2024-11-02T23:00:00.000Z
+103,Canberra,ACT,Australia,27,8,2024-11-02T23:00:00.000Z
+104,Salt Lake City,Utah,USA,27,21,2024-11-02T23:00:00.000Z
+105,Toronto,Ontario,Canada,25,16,2024-11-02T23:00:00.000Z
+106,Sydney,New South Wales,Australia,25,14,2024-11-02T23:00:00.000Z
+107,San Francisco,California,USA,25,19,2024-11-02T23:00:00.000Z
+108,Seattle,Washington,USA,24,18,2024-11-02T23:00:00.000Z
+109,Stockholm,Stockholm,Sweden,23,17,2024-11-02T23:00:00.000Z
+110,Moscow,Moscow,Russia,22,6,2024-11-02T23:00:00.000Z
+111,Tokyo,Tokyo,Japan,22,8,2024-11-02T23:00:00.000Z
+112,Astana,Astana,Kazakhstan,21,7,2024-11-02T23:00:00.000Z
+113,Helsinki,Uusimaa,Finland,20,15,2024-11-02T23:00:00.000Z
+114,Montreal,Quebec,Canada,20,16,2024-11-02T23:00:00.000Z
+115,Melbourne,Victoria,Australia,20,5,2024-11-02T23:00:00.000Z
+116,Houston,Texas,USA,20,16,2024-11-02T23:00:00.000Z
+117,New York City,New York,USA,20,16,2024-11-02T23:00:00.000Z
+118,Auckland,Auckland,New Zealand,18,5,2024-11-02T23:00:00.000Z
+119,Portland,Oregon,USA,18,14,2024-11-02T23:00:00.000Z
+120,Vancouver,British Columbia,Canada,13,8,2024-11-02T23:00:00.000Z
+121,Kyiv,Kyiv,Ukraine,11,3,2024-11-02T23:00:00.000Z

@@ -1,8 +1,35 @@
 ---
 theme: dashboard
-title: Example dashboard
-toc: false
+title: Beta Graphs in development
+toc: true
 ---
+
+<!-- Load and transform the data -->
+
+```js
+const ranks = FileAttachment("data/aqi_ranks.csv").csv({ typed: true });
+const aqi = FileAttachment("data/aqi.csv").csv({ typed: true });
+const countryData = await FileAttachment("data/countries.csv").csv({
+  typed: true,
+});
+const tokens = await FileAttachment("data/tokens.json").json({ typed: true });
+//console.log("Loaded tokens:", tokens);
+```
+
+
+# City Comparisons
+
+Here's a comparison of PM2.5 levels across different cities in Pakistan:
+
+```js
+import { cityComparison } from "./components/city.js";
+```
+
+<div class="grid grid-cols-1">
+  <div class="card">
+    ${resize((width) => cityComparison(aqi, { width }))}
+  </div>
+</div>
 
 # Rocket launches 🚀
 

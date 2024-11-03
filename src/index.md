@@ -92,11 +92,10 @@ Inputs.table(search, {
     city: "auto",
     //current_aqi: 300
   },
-})
+});
 ```
 
 ${aqiLegend()}
-
 
 # Station and City data
 
@@ -111,7 +110,6 @@ ${aqiLegend()}
   </div>
 </div>
 
-
 # Chart
 
 ## Bar plot
@@ -124,16 +122,16 @@ Displays 2 days of history, current, and 5 days of forecast data.
   </div>
 </div>
 
-## Box plot
+## Scatter plot
+
+For each city, displays 2 days of historical AQI, the current reading with a circle to highlight it, and a two day forecasted values to the right of that.
+The blue lines are individual station readings.
 
 <div class="grid grid-cols-1">
   <div class="card">
     ${resize((width) => createChart(aqi, { width }))}
   </div>
 </div>
-
-
-
 
 <!-- A shared color scale for consistency, sorted by the number of launches -->
 
@@ -153,10 +151,8 @@ const color = Plot.scale({
 });
 ```
 
-
-
-
 # Appendix
+
 Charts made but probably not needed, leaving for code sample.
 
 ## Cities AQI rankings
@@ -177,7 +173,6 @@ const numCities = view(
     ${resize((width) => aqiBarChart(ranks, numCities, {width}))}
   </div>
 </div>
-
 
 <!-- Plot of launch history -->
 
@@ -242,7 +237,7 @@ function vehicleChart(data, { width }) {
   </div>
 </div>
 
-## Cards 
+## Cards
 
 <!-- Cards with big numbers -->
 
@@ -251,25 +246,25 @@ function vehicleChart(data, { width }) {
 ```js
 function cityAqiCards(data) {
   const cityData = data
-    .filter(d => d.data_source === "city" && d.data_type === "current")
-    .sort((a, b) => b.aqius - a.aqius);  // Sort by AQI descending
-    
+    .filter((d) => d.data_source === "city" && d.data_type === "current")
+    .sort((a, b) => b.aqius - a.aqius); // Sort by AQI descending
+
   return htl.html`
     <div class="grid grid-cols-4">
-      ${cityData.map(city => htl.html`
+      ${cityData.map(
+        (city) => htl.html`
         <div class="card">
           <h3>${city.city}</h3>
           <span class="big">${Math.round(city.aqius)}</span>
           <div class="text-sm">PM2.5: ${Math.round(city.pm25)} μg/m³</div>
         </div>
-      `)}
+      `
+      )}
     </div>
   `;
 }
 ```
+
 ${cityAqiCards(aqi)}
-
-
-
 
 Data: Pakistan A
