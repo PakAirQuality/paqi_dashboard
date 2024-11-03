@@ -28,6 +28,11 @@ Pakistan CO2 emissions plotted on a map.
   </div>
 </div>
 
+### Notes
+
+* 🚧 This map is under development.
+* This data is categoried by type of emissions - the map needs updating to accurately reflect types e.g gas, cement, oil etc. 
+
 Data sourced from [Climate Trace](https://climatetrace.org/data) 2022 emissions data for Pakistan. Climate TRACE provides emissions data covering global emissions from 2015-2022.
 
 _May exclude emissions from sources currently only measured at the country level._

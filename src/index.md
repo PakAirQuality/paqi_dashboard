@@ -75,11 +75,12 @@ function aqiBox() {
 
 <div class="grid grid-cols-2">
   <div class="card">
-  Pakistan cities
+  <h4>Most polluted Pakistan cities (top 6)</h4>
   ${cityAqiCards(aqi)}
   </div>
 
   <div class="card">
+  <h4>Most polluted major city ranking</h4>
   
   ```js
 // Search input

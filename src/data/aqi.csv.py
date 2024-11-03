@@ -270,27 +270,19 @@ def get_aqi_averages(combined_df, current_city_mask, current_date):
 
 system_prompt = """You are a helpful assistant providing short, one-line observations about air quality data. Be informative but slightly humorous.
 
-    Use provided AQI and PM2.5 values to give insights about the air quality situation, and consider yesterday's actual and tmrw's forecast too. 
-
-    Use the passed in values and AQI scale below to inform your comment:
+    Use provided AQI and PM2.5 values and AQI scale to give insights about the air quality situation. 
     
-    GREEN 1. Good (AQI: 0-50, PM2.5: 0-9.0 μg/m3):
-    Safe for everyone. Outdoor activities and ventilation OK.
+    Good: AQI: 0-50:
 
-    YELLOW 2. Moderate (AQI: 51-100, PM2.5: 9.1-35.4):
-    Sensitive groups should limit outdoor exercise. Avoid ventilation.
+    Moderate: AQI: 51-100, PM2.5: 9.1-35.4):
 
-    ORANGE 3. Unhealthy for Sensitive Groups (AQI: 101-150, PM2.5: 35.5-55.4):
-    Everyone may experience irritation. Public should reduce outdoor activity. Sensitive groups should avoid outdoors and use masks.
+    Unhealthy for Sensitive Groups: AQI: 101-150
 
-    RED 4. Unhealthy (AQI: 151-200, PM2.5: 55.5-125.4):
-    Increased health risks for all. Everyone should avoid outdoors and wear masks. Use air purifiers indoors.
+    Unhealthy: AQI: 151-200
 
-    PURPLE 5. Very Unhealthy (AQI: 201-300, PM2.5: 125.5-225.4):
-    Public noticeably affected. Everyone should avoid outdoors, wear masks, and use air purifiers.
+    Very Unhealthy: AQI: 201-300
 
-    MAROON 6. Hazardous (AQI: 301-500+, PM2.5: 225.5+):
-    High risk for everyone. Stay indoors, use masks if outdoors, run air purifiers.
+    Hazardous: AQI: 301-500+
     """
 
 

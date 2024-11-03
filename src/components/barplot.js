@@ -105,19 +105,19 @@ function createPlot(selectedCity, selectedMetric) {
                     }
                 }
             }),
-            // Add text labels on top of bars
-            Plot.text(filteredData.filter((d, i) => i % 2 === 1), {
-                x: "timestamp",
-                y: "value",
-                text: d => d.value.toFixed(0), // Format number to 0 decimal place
-                dy: -8, // Shift text vertically
-                fontSize: 9,
-                fill: "black",
-                textAnchor: "middle",
-                stroke: "white",
-                strokeWidth: 2,
-                paintOrder: "stroke",
-            }),
+            // // Add text labels on top of bars
+            // Plot.text(filteredData.filter((d, i) => i % 2 === 1), {
+            //     x: "timestamp",
+            //     y: "value",
+            //     text: d => d.value.toFixed(0), // Format number to 0 decimal place
+            //     dy: -8, // Shift text vertically
+            //     fontSize: 9,
+            //     fill: "black",
+            //     textAnchor: "middle",
+            //     stroke: "white",
+            //     strokeWidth: 2,
+            //     paintOrder: "stroke",
+            // }),
             // Highlight for current data
             Plot.barY(
                 filteredData.filter(d => d.data_type === "current"), 
