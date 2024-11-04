@@ -1,5 +1,4 @@
 ---
-theme: [light, dashboard]
 title: Paqi dashboard
 toc: true
 ---
@@ -28,18 +27,22 @@ import { createChart } from "./components/chart.js";
 import { barChart } from "./components/barplot.js";
 ```
 
-
-# Station and City data
+# Station and City AQI
 
 ```js
 function aqiBox() {
   const aqiLevels = [
     { level: "Good", min: 0, max: 50, color: "#97C93D" },
     { level: "Moderate", min: 51, max: 100, color: "#FFCF01" },
-    { level: "Unhealthy for Sensitive Groups", min: 101, max: 150, color: "#FF9933" },
+    {
+      level: "Unhealthy for Sensitive Groups",
+      min: 101,
+      max: 150,
+      color: "#FF9933",
+    },
     { level: "Unhealthy", min: 151, max: 200, color: "#FF3333" },
     { level: "Very Unhealthy", min: 201, max: 300, color: "#A35DB5" },
-    { level: "Hazardous", min: 301, max: Infinity, color: "#8B3F3F" }
+    { level: "Hazardous", min: 301, max: Infinity, color: "#8B3F3F" },
   ];
 
   const getColor = (d) => {
@@ -60,8 +63,7 @@ function aqiBox() {
 }
 ```
 
-
-## City and Stations AQI map
+Our interactive map shows real-time air quality readings from monitoring stations across Pakistan. Larger circles represent city-wide averages, while smaller ones show individual station readings.
 
 <div class="grid">
   <div class="card">
@@ -70,8 +72,7 @@ function aqiBox() {
       MAPBOX_ACCESS_TOKEN: tokens.MAPBOX_ACCESS_TOKEN
       }))}
   </div> 
-</div> 
-
+</div>
 
 <div class="grid grid-cols-2">
   <div class="card">
@@ -93,25 +94,25 @@ Inputs.table(search, {
   format: {
     rank: (d, i) => search[i].rank,
     city: (city, i) => `${search[i].city}, ${search[i].country}`,
-    current_aqi: aqiBox()
+    current_aqi: aqiBox(),
   },
   columns: ["rank", "city", "current_aqi"],
   header: {
     rank: "Rank",
     city: "Location",
-    current_aqi: "AQI"
+    current_aqi: "AQI",
   },
   width: {
     rank: 35,
     city: 150,
     //AQI: 50
   },
-  style: "flex: 1; overflow-y: auto;"
-})
+  style: "flex: 1; overflow-y: auto;",
+});
 ```
+
   </div>
 </div>
-
 
 # Chart
 
@@ -177,8 +178,6 @@ const numCities = view(
   </div>
 </div>
 
-
-
 ## Cards
 
 <!-- Cards with big numbers -->
@@ -186,25 +185,30 @@ const numCities = view(
 <!-- Cards with AQI data for Pakistani cities -->
 
 ```js
-function cityAqiCards(data, numCities=6) {
+function cityAqiCards(data, numCities = 6) {
   const aqiLevels = [
     { level: "Good", min: 0, max: 50, color: "#97C93D" },
     { level: "Moderate", min: 51, max: 100, color: "#FFCF01" },
-    { level: "Unhealthy for Sensitive Groups", min: 101, max: 150, color: "#FF9933" },
+    {
+      level: "Unhealthy for Sensitive Groups",
+      min: 101,
+      max: 150,
+      color: "#FF9933",
+    },
     { level: "Unhealthy", min: 151, max: 200, color: "#FF3333" },
     { level: "Very Unhealthy", min: 201, max: 300, color: "#A35DB5" },
-    { level: "Hazardous", min: 301, max: Infinity, color: "#8B3F3F" }
+    { level: "Hazardous", min: 301, max: Infinity, color: "#8B3F3F" },
   ];
 
   const getAqiColor = (aqi) => {
-    const level = aqiLevels.find(l => aqi <= l.max);
+    const level = aqiLevels.find((l) => aqi <= l.max);
     return level ? level.color : "#8B3F3F";
   };
 
   const cityData = data
     .filter((d) => d.data_source === "city" && d.data_type === "current")
     .sort((a, b) => b.aqius - a.aqius)
-    .slice(0, numCities); 
+    .slice(0, numCities);
 
   return htl.html`
     <div class="grid grid-cols-3">
@@ -218,9 +222,15 @@ function cityAqiCards(data, numCities=6) {
           margin: 0.2rem;
           text-align: center;
         ">
-          <h4 style="font-weight: bold; margin-bottom: 0.3rem;">${city.city}</h4>
-          <span style="font-size: 1.3rem; font-weight: bold;">${Math.round(city.aqius)}</span>
-          <div style="font-size: 0.875rem; margin-top: 0.5rem;">PM2.5: ${Math.round(city.pm25)}</div>
+          <h4 style="font-weight: bold; margin-bottom: 0.3rem;">${
+            city.city
+          }</h4>
+          <span style="font-size: 1.3rem; font-weight: bold;">${Math.round(
+            city.aqius
+          )}</span>
+          <div style="font-size: 0.875rem; margin-top: 0.5rem;">PM2.5: ${Math.round(
+            city.pm25
+          )}</div>
         </div>
       `
       )}
@@ -230,4 +240,3 @@ function cityAqiCards(data, numCities=6) {
 ```
 
 ${cityAqiCards(aqi)}
-

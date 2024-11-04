@@ -2,9 +2,10 @@
 title: Emissions
 ---
 
-
 ```js
-const climate = await FileAttachment("data/climate_trace_data_pk_100yr_to_2022.csv").csv({
+const climate = await FileAttachment(
+  "data/climate_trace_data_pk_100yr_to_2022.csv"
+).csv({
   typed: true,
 });
 const tokens = await FileAttachment("data/tokens.json").json({ typed: true });
@@ -28,14 +29,22 @@ Pakistan CO2 emissions plotted on a map.
   </div>
 </div>
 
-### Notes
+## Important Notes About This Data
 
-* 🚧 This map is under development.
-* This data is categoried by type of emissions - the map needs updating to accurately reflect types e.g gas, cement, oil etc. 
+### Current Status:
 
-Data sourced from [Climate Trace](https://climatetrace.org/data) 2022 emissions data for Pakistan. Climate TRACE provides emissions data covering global emissions from 2015-2022.
+* 📅 Data shown is for 2022 only
+* ⚠️ Dataset is currently incomplete and being updated (may exclude emissions from some sources)
+* 🔄 Emissions categorization is in progress
 
-_May exclude emissions from sources currently only measured at the country level._
+### Upcoming Improvements:
+
+* Expanding data coverage
+* Adding detailed emissions categories (gas, cement, oil, etc.)
+* Implementing better visualization of emission types
+* Regular updates with latest available data
+
+Data Disclaimer: This is a beta version of our emissions map. We're continuously working to improve data accuracy and completeness.
 
 ## Emission data table
 
@@ -47,10 +56,17 @@ const search = view(Inputs.search(climate, { placeholder: "Search ..." }));
 ```js
 // Display table
 Inputs.table(search, {
-    columns: ["source_name", "source_type", "original_inventory_sector", "gas", "emissions_quantity", "emissions_factor", "capacity", "capacity_units", "activity", "activity_units"]
-})
+  columns: [
+    "source_name",
+    "source_type",
+    "original_inventory_sector",
+    "gas",
+    "emissions_quantity",
+    "emissions_factor",
+    "capacity",
+    "capacity_units",
+    "activity",
+    "activity_units",
+  ],
+});
 ```
-
-
-
-

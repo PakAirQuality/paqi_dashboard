@@ -17,10 +17,13 @@ const tokens = await FileAttachment("data/tokens.json").json({ typed: true });
 //console.log("Loaded tokens:", tokens);
 ```
 
+## 📊 Visualization Testing Lab
 
-# City Comparisons
+These charts are experimental visualizations we're testing for potential inclusion in our main dashboard. We welcome your feedback on which displays are most useful and intuitive. Some graphs may be placeholders or show sample data while we refine our visualization approaches.
 
-Here's a comparison of PM2.5 levels across different cities in Pakistan:
+## Pakistan City Comparisons
+
+⚠️ Development Note: This experimental visualization attempts to show PM2.5 levels across all Pakistani cities simultaneously. While comprehensive, we recognize it's currently too dense to be practical. 
 
 ```js
 import { cityComparison } from "./components/city.js";
@@ -32,8 +35,11 @@ import { cityComparison } from "./components/city.js";
   </div>
 </div>
 
+Note: The forecast data shown in these graphs (the right side of the chart) should be treated as experimental and may not be reliable for decision-making.
 
-# City Rankings
+## Global City Rankings
+
+This interactive table shows current air quality rankings across cities worldwide.
 
 ```js
 function aqi_sparkbar() {
@@ -152,5 +158,57 @@ Inputs.table(search, {
     city: 150,
     //AQI: 50
   }
+})
+```
+
+## Pakistan Cities
+
+```js
+Plot.plot({
+  x: {
+    value: d => d.ts,
+    label: "Time",
+  },
+  y: {
+    label: "Cities",
+    domain: Array.from(new Set(aqi.map(d => d.city))),
+  },
+  marks: [
+    Plot.cell(aqi, {
+      x: "ts",
+      y: "city",
+      fill: d => d.aqi_color,
+      title: d => `${d.city}\nPM2.5: ${d.pm25}\nTime: ${d3.timeFormat("%b %d, %H:%M")(d.ts)}` // Formatted tooltip
+    }),
+    
+  ],
+  height: 400,
+  marginLeft: 100
+})
+```
+
+```js
+// Simple sort by city then timestamp
+const sortedAqi = d3.sort(aqi, d => `${d.city}${d.ts}`);
+
+Plot.plot({
+  x: {
+    value: d => d.ts,
+    label: "Time",
+  },
+  y: {
+    label: "Cities",
+    domain: Array.from(new Set(sortedAqi.map(d => d.city))),
+  },
+  marks: [
+    Plot.cell(sortedAqi, {
+      x: "ts",
+      y: "city",
+      fill: d => d.aqi_color,
+      title: d => `${d.city}\nPM2.5: ${d.pm25}\nTime: ${d3.timeFormat("%b %d, %H:%M")(d.ts)}`
+    }),
+  ],
+  height: 400,
+  marginLeft: 100
 })
 ```
